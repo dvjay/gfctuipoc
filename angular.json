@@ -155,6 +155,41 @@
           }
         }
       }
+    },
+    "network-graph": {
+      "projectType": "library",
+      "root": "projects/network-graph",
+      "sourceRoot": "projects/network-graph/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/network-graph/tsconfig.lib.json",
+            "project": "projects/network-graph/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/network-graph/src/test.ts",
+            "tsConfig": "projects/network-graph/tsconfig.spec.json",
+            "karmaConfig": "projects/network-graph/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/network-graph/tsconfig.lib.json",
+              "projects/network-graph/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
   "defaultProject": "nw-components-angular"
 }

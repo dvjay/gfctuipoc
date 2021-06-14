@@ -24,6 +24,12 @@
       ],
       "nw-components-angular/*": [
         "dist/nw-components-angular/*"
+      ],
+      "network-graph": [
+        "dist/network-graph"
+      ],
+      "network-graph/*": [
+        "dist/network-graph/*"
       ]
     }
   },

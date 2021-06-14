@@ -63,6 +63,7 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
                 public overlay: Overlay, 
                 public viewContainerRef: ViewContainerRef, 
                 public fadeinNotificationService: FadeinNotificationService) {
+                  console.log("graph constructor called");
       this.options = graphEngineService.options;
     }
 
