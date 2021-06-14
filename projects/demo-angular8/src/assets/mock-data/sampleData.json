@@ -1,0 +1,75 @@
+{
+  "status": "success",
+  "timestamp": "2021-05-23",
+  "data": [
+    {
+      "printSet": [
+        {
+          "v_id": "9137353861",
+          "v_type": "gfctAccount",
+          "attributes": {
+            "amlaccid": "9137353861",
+            "accno": "4147342071409744",
+            "accnm": "SURESH KUMAR SADASIVAN NAIR",
+            "accopendate": "2019-02-19",
+            "accptyrolecd": "BOR",
+            "flucd": "CNS_RTL_BNK",
+            "fludescription": "Consumer Retail Banking",
+            "isskewed": "false",
+            "@visited": true
+          }
+        },
+        {
+          "v_id": "9063500632",
+          "v_type": "gfctAccount",
+          "attributes": {
+            "amlaccid": "9063500632",
+            "accno": "4147342080775721",
+            "accnm": "SURESH KUMAR SADASIVAN NAIR",
+            "accopendate": "2019-02-19",
+            "accptyrolecd": "BOR",
+            "flucd": "CNS_RTL_BNK",
+            "fludescription": "Consumer Retail Banking",
+            "isskewed": "false",
+            "@visited": true
+          }
+        },
+        {
+          "v_id": "90098302633",
+          "v_type": "gfctEntity",
+          "attributes": {
+            "entityid": "90098302633",
+            "entitylabel": "SURESH KUMAR SADASIVAN NAIR",
+            "src": "CP",
+            "flucd": "CNS_RTL_BNK",
+            "fludescription": "Consumer Retail Banking",
+            "isskewed": "false",
+            "@visited": true
+          }
+        }
+      ]
+    },
+    {
+      "@@edgeSet": [
+        {
+          "e_type": "has_acct",
+          "from_id": "90098302633",
+          "from_type": "gfctEntity",
+          "to_type": "gfctAccount",
+          "to_id": "9137353861",
+          "directed": false,
+          "attributes": {}
+        },
+        {
+          "e_type": "has_acct",
+          "from_id": "90098302633",
+          "from_type": "gfctEntity",
+          "to_type": "gfctAccount",
+          "to_id": "9063500632",
+          "directed": false,
+          "attributes": {}
+        }
+      ]
+    }
+  ]
+}

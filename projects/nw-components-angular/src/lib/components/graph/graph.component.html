@@ -1,0 +1,89 @@
+<div class='nw-graph-container' [style.height.px]='containerHeight'>
+    <div class='graph-section-container' [style.height.px]='options.height'>
+        <div class="graph-svg-section"> 
+            <svg #svg [attr.width]="options.width" [attr.height]="options.height" (click)="viewportClick()"> 
+                <defs> 
+                    <marker id="arrowhead" viewBox="0 0 10 10" refX="7" refY="5" markerUnits="strokeWidth" 
+                            markerWidth="8" markerHeight="6" orient="auto">
+                        <path d="M 0 0 L 10 5 L 0 10 z" stroke="none" fill="#595959" /> 
+                    </marker> 
+                    <filter x="0" y="0" width="1" height="1" id="bg-text">
+                        <feFlood flood-color="white" flood-opacity="1" />
+                        <feComposite in="SourceGraphic" operator="xor" /> 
+                    </filter> 
+                </defs> 
+                <g [zoomableOf]="svg" id="nw-root">
+                    <g [link]="link" [hideLabel]="hideLabel$ | async" *ngFor="let link of links"></g> 
+                    <g [node]="node" style="outline: none" 
+                        [highlightNodesFromSidebar]="highlightNodesFromSidebar" 
+                        [graph]="graphEngineService" 
+                        *ngFor="let node of nodes; let indexOfNode=index; trackBy: trackItem" 
+                        [rootNodeId]="rootNodeId$ | async" 
+                        [selectedNodes]="selectedNodes$ | async" 
+                        [nodes]="nodes" [hideLabel]="hideLabel$ | async" 
+                        (expandNode)="expandNode($event)" 
+                        (focus)="latestFocusedNode=node" 
+                        (contextmenu)="onOpenContextMenu($event, node, indexOfNode); $event.preventDefault();" 
+                        (notifyIsSkewed)='notifyIsSkewed($event)' 
+                        (selectNode)="selectNode($event)" 
+                        (selectOnlyClickedNode)="selectOnlyClickedNode($event)" 
+                        cdkOverlayOrigin #noderef="cdkOverlayOrigin">
+                    </g>
+                    <g [node-label]="node" style="outline: none" [hideLabel]="hideLabel$ | async"
+                        [isMouseOverSidebarSelectedNodes]="isMouseOverSidebarSelectedNodes" *ngFor="let node of nodes;"
+                        [highlightNodesFromSidebar]="highlightNodesFromSidebar"> 
+                    </g> 
+                </g> 
+            </svg> 
+        </div>
+        <div class="graph-legend">
+            <node-legend></node-legend>
+        </div>
+        <div class="graph-hz-tools-section">
+            <div style="margin-left: 2px; margin-right: 20px;">
+                Enable Labels
+            </div>
+            <div>
+                <mat-slide-toggle style="cursor: pointer" (change)="toggleLabel()" [checked]="hideLabel$ | async">
+                </mat-slide-toggle>
+            </div>
+            <div class="graph-tools-item">
+                <label for="nw-graph-tool-numhops">Number of Hops: </label> 
+                <input numeric type="text" id="nw-graph-tool-numhops" name="nw-graph-tool-numhops" maxlength="3" size="3" [(ngModel)]="numHops">
+                <button mat-stroked-button (click)="OnChangeNumHops()">Go</button> 
+            </div> 
+            <div class="graph-tools-item">
+                <label for="nw-graph-tool-maxnodes">Max Nodes: </label> 
+                <input numeric type="text" id="nw-graph-tool-maxnodes" name="nw-graph-tool-maxnodes" maxlength="3" size="3" [(ngModel)]="maxNodes">
+                <button mat-stroked-button (click)="OnChangeNumHops()">Go</button> 
+            </div> 
+            <div class="graph-tools-item">
+                <network-fadein-notify [notifications]="fadeinNotificationService.notifications"></network-fadein-notify>
+            </div>
+        </div> 
+        <div class="graph-tools-section"> 
+            <div class="graph-tools-item-redraw"> 
+                <button mat-mini-fab color="primary" aria-label="Refresh" style="display: flex; align-items: center; justify-content: center; height:28px;width:28px" (click)="resetNodePositions()">
+                    <mat-icon matTooltip="Reposition" matTooltipPosition="left" style="font-size: 20px; vertical-align: middle; margin-top: 3px;">
+                        replay
+                    </mat-icon> 
+                </button> 
+            </div> 
+        </div> 
+        <div class="graph-loader-section" *ngIf="dataLoading">
+            <mat-spinner></mat-spinner> 
+        </div> 
+        <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="latestFocusedNodeRef"
+                [cdkConnectedOverlayOpen]="isContextMenuOpen" 
+                [cdkConnectedOverlayOffsetX]="0" 
+                [cdkConnectedOverlayOffsetY]="0"> 
+                <ul class="menu" cdkTrapFocus cdkTrapFocusAutoCapture (focusout)="isContextMenuOpen=false" (mousewheel)="isContextMenuOpen=false"> 
+                    <li *ngFor="let option of contextMenuOptions" class="menu-item"> 
+                        <button type="button" class="menu-btn" (click)="contextMenuClick(option.id, latestFocusedNode!); isContextMenuOpen = false;">
+                            <span class="menu-text">{{option.label}}</span> 
+                        </button> 
+                    </li> 
+                </ul> 
+        </ng-template>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+<network-graph *ngIf="rootNodeId"
+                [rootNodeId]='rootNodeId'
+                [dataLoading]='dataLoading'
+                [config]='config'
+                [data]='data'
+                (numHopChanged)='onNumHopChange($event)'>
+</network-graph>
+<div>this div is loaded!</div>

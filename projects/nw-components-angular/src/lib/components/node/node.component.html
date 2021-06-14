@@ -1,0 +1,36 @@
+<svg:g class="nw-node" 
+        [attr.transform]="'translate(' + node!.x + ',' + node!.y + ')'" 
+        [draggableNode]="node!" 
+        [draggableInGraph]="graph!" 
+        [tooltip]="node" 
+        [ngStyle]="{'opacity': nodeOpacity}" 
+        (click)="$event.stopPropagation()" 
+        (mouseover)="handleMouseOver()"
+        (mouseout)="handleMouseOut()"> 
+    <svg:g>
+        <svg:circle *ngIf="selectedNodes.indexOf(node) !== -1" 
+                class="select-node-circle" 
+                cx="0" 
+                cy="0" 
+                [attr.r]="node.r + 4"> 
+        </svg:circle> 
+        <svg:circle [ngStyle]="nodeStyle" 
+                    class="node-circle" 
+                    [attr.fill]="node.color" 
+                    cx="0" 
+                    cy="0" 
+                    [attr.r]="node.r"> 
+        </svg:circle> 
+        <svg:circle *ngIf="node.nodeId === rootNodeId" 
+                    class="node-circle-root-entity" 
+                    cx="0" 
+                    cy="0" 
+                    [attr.r]="node.r - 2"> 
+        </svg:circle> 
+        <svg:image [attr.href]="node.imagePath" 
+                    height="30" 
+                    width="30" 
+                    transform="translate(-15, -15)"/>
+        <title></title>
+    </svg:g> 
+</svg:g>
