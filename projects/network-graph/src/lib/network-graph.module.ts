@@ -15,6 +15,8 @@ import { DataBuilderService } from "./services/data-builder.service";
 import { LinkComponent } from './components/link/link.component';
 import { NodeComponent } from './components/node/node.component';
 import { NodeLabelComponent } from './components/node-label/node-label.component';
+import { LegendComponent } from './components/legend/legend.component';
+import { FadeinNotificationComponent } from './components/fadein-notification/fadein-notification.component';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
@@ -33,12 +35,13 @@ import { MatCardModule,
           MatToolbarModule, 
           MatTooltipModule } from '@angular/material';
 
-
 @NgModule({
   declarations: [GraphComponent,
                   LinkComponent,
                   NodeComponent,
                   NodeLabelComponent,
+                  LegendComponent,
+                  FadeinNotificationComponent,
                   ZoomableDirective,
                   DraggableDirective,
                   TooltipDirective],
