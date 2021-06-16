@@ -1,13 +1,21 @@
-.nw-graph-container { 
+/* :host {
+    display: block;
+    min-width: 700px;
+    height: 700px;
+} */
+/* .nw-graph-container { 
     width: 100%; 
     position: relative; 
     box-sizing: content-box; 
     overflow-x: hidden; 
     overflow-y: auto;
-}
+} */
 .graph-section-container { 
     /* margin: auto; */ 
     position: relative; 
+    width: 100%; 
+    box-sizing: content-box; 
+    overflow: hidden;
     /* background-color: #E1F2F7; */
     display: grid; 
     grid-template-columns: auto auto auto; 
@@ -15,10 +23,14 @@
     border: solid 1px #555; 
     box-shadow:0 0 10px rgba(0, 0, 0, 0.6); 
     box-sizing: content-box;
-}
-.graph-svg-section { 
-    grid-column: 1/4;
-    grid-row: 1 / 4; 
     overflow-x: hidden; 
     overflow-y: hidden;
+}
+.graph-svg-section { 
+    position: relative; 
+    width: 100%; 
+    box-sizing: content-box; 
+    overflow: auto;
+    grid-column: 1/4;
+    grid-row: 1 / 4;
 }

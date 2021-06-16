@@ -1,21 +1,19 @@
-<div class='nw-graph-container' [style.height.px]='options.height'>
-    <div class='graph-section-container' [style.height.px]='options.height'>
-        <div class="graph-svg-section">
-            <svg #svg [attr.width]="options.width" [attr.height]="options.height" (click)="viewportClick()"> 
-                <defs> 
-                    <marker id="arrowhead" viewBox="0 0 10 10" refX="7" refY="5" markerUnits="strokeWidth" 
-                            markerWidth="8" markerHeight="6" orient="auto">
-                        <path d="M 0 0 L 10 5 L 0 10 z" stroke="none" fill="#595959" /> 
-                    </marker> 
-                    <filter x="0" y="0" width="1" height="1" id="bg-text">
-                        <feFlood flood-color="white" flood-opacity="1" />
-                        <feComposite in="SourceGraphic" operator="xor" /> 
-                    </filter> 
-                </defs> 
-                <g [zoomableOf]="svg" id="nw-root">
-                    
-                </g> 
-            </svg> 
-        </div>
+<div class='graph-section-container' #graphcontainer [style.height.px]='options.height'>
+    <div class='graph-svg-section' [style.height.px]='options.height'>
+        <svg #svg [attr.width]='options.width - SVG_MARGIN' [attr.height]='options.height - SVG_MARGIN' (click)='viewportClick()'> 
+            <defs> 
+                <marker id='arrowhead' viewBox='0 0 10 10' refX='7' refY='5' markerUnits='strokeWidth' 
+                        markerWidth='8' markerHeight='6' orient='auto'>
+                    <path d='M 0 0 L 10 5 L 0 10 z' stroke='none' fill='#595959' /> 
+                </marker> 
+                <filter x='0' y='0' width='1' height='1' id='bg-text'>
+                    <feFlood flood-color='white' flood-opacity='1' />
+                    <feComposite in='SourceGraphic' operator='xor' /> 
+                </filter> 
+            </defs> 
+            <g [zoomableOf]='svg' id='nw-root'>
+                
+            </g> 
+        </svg> 
     </div>
 </div>

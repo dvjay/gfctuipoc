@@ -2,6 +2,7 @@ import { ActionTypes, AddDNDBNotification, AddSkewedNotification, CollapseNode, 
 import { initialState, State } from './state'; 
 import { GraphLogType, generateUniqueId, GraphLog } from '../models/graph-log';
 import { Action } from '@ngrx/store';
+import { nwToString } from '../utils';
 
 export function graphReducer(state = initialState, action: Action): State {
     switch(action.type) { 
@@ -67,52 +68,41 @@ export function graphReducer(state = initialState, action: Action): State {
         }
         case ActionTypes.LOAD_EXTERNAL_DATA: {
             const payload = (action as LoadExternalData).payload; 
-            const rootNodeId = payload.rootNodeId; 
-            let nwData = payload.data; 
+            let rootNodeId = nwToString(payload.rootNodeId); 
+            let payloadData = payload.data; 
+            let stateData = state.data;
             const maxNodesCount = payload.maxNodeCount; 
-            let isMaxNodesCountExceeded = state.maxNodesExceeded;
-            const rootNode = nwData.nodes.get(rootNodeId); 
-            
-            if(nwData && nwData.nodes && rootNode) {
-                rootNode.collapsed = false; 
-                if(Array.isArray(rootNode.sourceIds)) { 
-                    rootNode.sourceIds.forEach((nId: any) => {
-                        const n = nwData.nodes.get(nId); 
-                        if(n) {
-                            n.collapsed = false;
-                        }
-                    });
-                }
-                if(Array.isArray(rootNode.targetIds)) { 
-                    rootNode.targetIds.forEach((nId: any) => {
-                        const n = nwData.nodes.get(nId); 
-                        if(n) {
-                            n.collapsed = false;
-                        }
-                    });
-                }
-            } else {
-                nwData = initialState.data;
+            // step 1: Check if rootNodeId valid
+            // Step 2: Check if rootNodeId exist in incoming data
+            if(!rootNodeId || !payloadData.nodes.has(rootNodeId)) {
+                return state;
             }
-            
-            if(payload.data && payload.data.nodes && payload.data.nodes.size > maxNodesCount) {
-                isMaxNodesCountExceeded = true; 
-            } else {
-                isMaxNodesCountExceeded = false;
+            // Step 3: Copy existing node position
+            if(rootNodeId === state.rootNodeId) {
+                payloadData.nodes.forEach((_, key) => {
+                    if(stateData.nodes.has(key)) {
+                        const previousNode = stateData.nodes.get(key);
+                        const currentNode = payloadData.nodes.get(key);
+                        currentNode.x = previousNode.x;
+                        currentNode.y = previousNode.y;
+                    }
+                })
             }
+            // Step 4: Expand root node
+            payloadData.nodes.get(rootNodeId).collapsed = false;
 
             return {
                 ...initialState, 
-                rootNodeId: payload.rootNodeId, 
-                data: nwData, 
-                maxNodesExceeded: isMaxNodesCountExceeded
+                rootNodeId: rootNodeId, 
+                data: payloadData, 
+                maxNodesExceeded: payloadData.nodes.size > maxNodesCount
             };
         }
         case ActionTypes.RESET_NODES_POSITIONS: {
             const currentNodes = state.data.nodes; 
             const currentEdges = state.data.edges;
             
-            for(let [key, value] of currentNodes) {
+            for(let [_, value] of currentNodes) {
                 delete value.x; 
                 delete value.y; 
                 delete value.vx; 

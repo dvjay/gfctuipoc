@@ -40,3 +40,11 @@ export function isArrayOfNonEmptyStrings(value: any) {
     }
     return false;
 }
+
+export function nwToString(value: any): string {
+    if(typeof value !== 'number' && typeof value !== 'string') {
+        return "";
+    } else {
+        return value.toString().trim();
+    }
+}
