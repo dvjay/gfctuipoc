@@ -12,10 +12,12 @@ export class ConfigParserService {
     public nwRawConfig: any; 
     public nwConfig: NwConfig = {...defaultNwConfig, node: null, edge: null}; 
     public nwNodeTypes = new Map<string, NwNodeType>();
+    public processNodeWithUnknownNodeType = false;
 
     public parseConfig(config: any) {
         if(typeof config === 'object' && config !== null) {
             this.nwRawConfig = config; 
+            this.setProcessNodeWithUnknownNodeType();
             this.setMandatoryConfig(); 
             this.setNodeConfig(); 
             this.setNodeTypesConfig(); 
@@ -25,6 +27,10 @@ export class ConfigParserService {
             this.nwRawConfig = undefined; 
             console.error("Invalid config!");
         }
+    }
+
+    private setProcessNodeWithUnknownNodeType() { 
+        this.processNodeWithUnknownNodeType = this.nwRawConfig && this.nwRawConfig.processNodeWithUnknownNodeType === true? true : false;
     }
         
     private setMandatoryConfig() { 

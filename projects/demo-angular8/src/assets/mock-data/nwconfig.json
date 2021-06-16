@@ -2,6 +2,7 @@
   "maxSelectedNodes": 100,
   "displayLabel": true,
   "autoExpand": false,
+  "processNodeWithUnknownNodeType": true,
   "numHops": 2,
   "maxNodeCount": 10,
   "viewportHeight": 700,

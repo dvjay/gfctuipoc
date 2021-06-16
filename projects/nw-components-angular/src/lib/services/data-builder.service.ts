@@ -1,3 +1,4 @@
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Injectable } from "@angular/core";
 import { EdgeId, IEdge, INode, INwData, NeighboursStateType, NodeId } from "../models/nw-data";
 import { ConfigParserService } from "./config-parser.service";
@@ -29,8 +30,8 @@ export class DataBuilderService {
                 for (const rawNode of nodeCollection) {
                     const newNode = {} as INode; 
                     this.loadNwNodeAttributesFromRawNode(rawNode, newNode); 
-                    this.sanitizeNwNode(newNode); 
-                    if(this.isNwNodeValid(newNode)) {
+                    this.sanitizeNwNode(newNode, this.nwConfigParser.nwConfig.nodeRadius); 
+                    if(this.isNwNodeValid(newNode) && this.shouldAddNodeWithUnknownNodeType(newNode)) {
                         this.nwData.nodes.set(newNode.id, newNode);
                     }
                 }
@@ -41,7 +42,7 @@ export class DataBuilderService {
                     const newEdge = {} as IEdge; 
                     this.loadNwEdgeAttributesFromRawNode(rawEdge, newEdge); 
                     this.sanitizeNwEdge(newEdge); 
-                    if (this.isNwEdgeValid(newEdge)) {
+                    if (this.isNwEdgeValid(newEdge, this.nwData.nodes)) {
                         this.nwData.edges.set(newEdge.id, newEdge);
                     }
                 }
@@ -145,13 +146,13 @@ export class DataBuilderService {
         nwNode.imagePath = nodeTypeConfig && typeof nodeTypeConfig.imagePath === 'string'? nodeTypeConfig.imagePath: EMPTY_STRING;
     }
 
-    private sanitizeNwNode(nwNode: INode) { 
+    private sanitizeNwNode(nwNode: INode, nodeRadius: number) { 
         if(typeof nwNode === 'object') {
             nwNode.id = nwNode && (typeof nwNode.id === 'string' || typeof nwNode.id === 'number') ? 
                         nwNode.id.toString(): EMPTY_STRING; 
             nwNode.type = nwNode && (typeof nwNode.type === 'string' || typeof nwNode.type === 'number') ? 
                         nwNode.type.toString(): EMPTY_STRING; 
-            nwNode.r = this.nwConfigParser.nwConfig.nodeRadius; 
+            nwNode.r = nodeRadius;
             nwNode.sourceIds = []; 
             nwNode.targetIds = []; 
             nwNode.neighboursStatus = NeighboursStateType.LOADED; 
@@ -177,7 +178,7 @@ export class DataBuilderService {
             nwEdge.targetNodeId = nwEdge.target;
         }
     }
-    private isNwNodeValid(nwNode: INode) {
+    private isNwNodeValid(nwNode: INode): boolean {
         let idValid = false;
         let typeValid = false;
         if(nwNode) {
@@ -195,16 +196,31 @@ export class DataBuilderService {
         }
     }
 
-    private isNwEdgeValid(nwEdge: IEdge) {
+    private shouldAddNodeWithUnknownNodeType(nwNode: INode): boolean {
+        if(this.nwConfigParser) {
+            const processNodeWithUnknownNodeType = this.nwConfigParser.processNodeWithUnknownNodeType;
+            if(processNodeWithUnknownNodeType === true) {
+                return true;
+            } else {
+                if(this.nwConfigParser.nwNodeTypes.has(nwNode.nodeType)) {
+                    return true;
+                }
+                return false;
+            }
+        } 
+        return false;
+    }
+
+    private isNwEdgeValid(nwEdge: IEdge, nodeCollection: Map<NodeId, INode>) {
         let sourceValid = false;
         let targetValid = false;
         if(nwEdge) {
             // Validating Source Node ID
-            if(typeof nwEdge.source === 'string' && nwEdge.source.trim().length > 0) {
+            if(nodeCollection.has(nwEdge.source)) {
                 sourceValid = true;
             }
             // Validating Target Node Type 
-            if(typeof nwEdge.target === 'string' && nwEdge.target.trim().length > 0) {
+            if(nodeCollection.has(nwEdge.target)) {
                 targetValid = true;
             }
             return sourceValid && targetValid; 
