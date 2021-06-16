@@ -12,7 +12,26 @@
                 </filter> 
             </defs> 
             <g [zoomableOf]='svg' id='nw-root'>
-                
+                <g [link]="link" [hideLabel]="hideLabel$ | async" *ngFor="let link of links"></g> 
+                <g [node]="node" style="outline: none" 
+                    [highlightNodesFromSidebar]="highlightNodesFromSidebar" 
+                    [graph]="graphEngineService" 
+                    *ngFor="let node of nodes; let indexOfNode=index; trackBy: trackItem" 
+                    [rootNodeId]="rootNodeId$ | async" 
+                    [selectedNodes]="selectedNodes$ | async" 
+                    [nodes]="nodes" [hideLabel]="hideLabel$ | async" 
+                    (expandNode)="expandNode($event)" 
+                    (focus)="latestFocusedNode=node" 
+                    (contextmenu)="onOpenContextMenu($event, node, indexOfNode); $event.preventDefault();" 
+                    (notifyIsSkewed)='notifyIsSkewed($event)' 
+                    (selectNode)="selectNode($event)" 
+                    (selectOnlyClickedNode)="selectOnlyClickedNode($event)" 
+                    cdkOverlayOrigin #noderef="cdkOverlayOrigin">
+                </g>
+                <g [node-label]="node" style="outline: none" [hideLabel]="hideLabel$ | async"
+                    [isMouseOverSidebarSelectedNodes]="isMouseOverSidebarSelectedNodes" *ngFor="let node of nodes;"
+                    [highlightNodesFromSidebar]="highlightNodesFromSidebar"> 
+                </g> 
             </g> 
         </svg> 
     </div>

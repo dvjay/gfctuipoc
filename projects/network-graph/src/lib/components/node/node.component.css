@@ -1,0 +1,37 @@
+.nw-node {
+    outline: none;
+}
+
+.select-node-circle {
+    cursor: pointer;
+    stroke-width: 4;
+    fill: red;
+}
+
+.node-circle-root-entity {
+    cursor: pointer;
+    fill: transparent;
+    stroke-width: 2;
+    stroke: #F8D480;
+}
+
+.node-circle {
+    cursor: pointer;
+    stroke-width: 4;
+}
+
+.node-name {
+    font-family: 'Lato';
+    text-anchor: middle;
+    alignment-baseline: central;
+    font-weight: 300;
+    fill: white;
+}
+
+.skewed {
+    stroke-width: 4;
+}
+
+.node-label {
+    font-size: 11px;
+}
