@@ -11,8 +11,6 @@ import {Subscription} from 'rxjs';
 export class NodeLabelComponent {
     @Input('node-label') node: INode | undefined;//needed 
     @Input('hideLabel') hideLabel: boolean | undefined;//needed 
-    @Input('isMouseOverSidebarSelectedNodes') isMouseOverSidebarSelectedNodes: boolean | undefined;//needed 
-    @Input('highlightNodesFromSidebar') highlightNodesFromSidebar: string[] = []; //needed 
     nodeRelationMouseOverSub: Subscription; 
     nodeRelationMouseOutSub: Subscription; 
     blurThisNode: boolean = false;
@@ -53,12 +51,6 @@ export class NodeLabelComponent {
     }
 
     get nodeOpacity() { 
-        if(this.isMouseOverSidebarSelectedNodes) { 
-            if(this.highlightNodesFromSidebar.indexOf(this.node!.nodeid) > -1) {
-                return 1;
-            }
-            return 0.2;
-        }
         if(this.blurThisNode) {
             return 0.2;
         }

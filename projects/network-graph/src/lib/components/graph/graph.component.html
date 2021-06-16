@@ -13,8 +13,7 @@
             </defs> 
             <g [zoomableOf]='svg' id='nw-root'>
                 <g [link]="link" [hideLabel]="hideLabel$ | async" *ngFor="let link of links"></g> 
-                <g [node]="node" style="outline: none" 
-                    [highlightNodesFromSidebar]="highlightNodesFromSidebar" 
+                <g [node]="node" style="outline: none"
                     [graph]="graphEngineService" 
                     *ngFor="let node of nodes; let indexOfNode=index; trackBy: trackItem" 
                     [rootNodeId]="rootNodeId$ | async" 
@@ -28,9 +27,7 @@
                     (selectOnlyClickedNode)="selectOnlyClickedNode($event)" 
                     cdkOverlayOrigin #noderef="cdkOverlayOrigin">
                 </g>
-                <g [node-label]="node" style="outline: none" [hideLabel]="hideLabel$ | async"
-                    [isMouseOverSidebarSelectedNodes]="isMouseOverSidebarSelectedNodes" *ngFor="let node of nodes;"
-                    [highlightNodesFromSidebar]="highlightNodesFromSidebar"> 
+                <g [node-label]="node" style="outline: none" [hideLabel]="hideLabel$ | async" *ngFor="let node of nodes;"> 
                 </g> 
             </g> 
         </svg> 

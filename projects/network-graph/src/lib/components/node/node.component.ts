@@ -18,11 +18,7 @@ export class NodeComponent implements OnDestroy {
     @Input('nodes') nodes: INode[] | undefined;
     @Input('rootNodeId') rootNodeId: string | undefined;
     @Input('selectedNodes') selectedNodes: INode[] | undefined;
-    @Input('isMouseOverSidebar SelectedNodes') isMouseOverSidebarSelectedNodes: boolean | undefined;
-    @Input('highlightNodesFromSidebar') highlightNodesFromSidebar: string[] | undefined;
-    @Output() expandNode = new EventEmitter(); 
-    @Output() mouseoverNodesFromSidebar = new EventEmitter(); 
-    @Output() mouseoutNodesFromSidebar = new EventEmitter(); 
+    @Output() expandNode = new EventEmitter();
     @Output() selectNode = new EventEmitter(); 
     @Output() selectOnlyClickedNode = new EventEmitter(); 
     notificationMoveOverSub: Subscription; 
@@ -39,22 +35,6 @@ export class NodeComponent implements OnDestroy {
     constructor (private notificationBrokerService: NotificationBrokerService, 
                 private dispatchNodeLoadService: DispatchNodeLoadService, 
                 private nodeRelationService: NodeRelationService) {
-        this.notificationMoveOverSub = notificationBrokerService.notificationMoveOver$.subscribe(
-            (msgObj: NotificationMessage) => {
-                if(this.node!.nodeType === 'entity' && typeof msgObj.entityId === 'string' && msgObj.entityId === this.node!['entityId'] ) {
-                        this.highlightFromSidebar();
-                    } else if(Array.isArray(msgObj.nodeIds) && msgObj.nodeIds.indexOf(this.node!.nodeId) > -1) {
-                        this.highlightFromSidebar();
-                    }
-                });
-        this.notificationMoveOutSub = notificationBrokerService.notificationMoveOut$.subscribe(
-            (msgObj: NotificationMessage) => {
-                if(this.node!.nodeType === 'entity' && typeof msgObj.entityId === 'string' && msgObj.entityId === this.node!['entityId']) {
-                    this.resetHighlightFromSidebar();
-                } else if(Array.isArray(msgObj.nodeIds) && msgObj.nodeIds.indexOf(this.node!.nodeId) > -1) {
-                    this.resetHighlightFromSidebar();
-                }
-        });
         this.dispatchNodeLoad = dispatchNodeLoadService.dispatchNodeLoad$.subscribe(
             (nodeIds: string[]) => {
                 if(Array.isArray(nodeIds) && nodeIds.indexOf(this.node!.nodeId) > -1) {
@@ -136,13 +116,6 @@ export class NodeComponent implements OnDestroy {
     }
 
     get nodeOpacity() {
-        if(this.isMouseOverSidebarSelectedNodes) {
-            if(this.highlightNodesFromSidebar!.indexOf(this.node!.nodeId) > -1) {
-                return 1;
-            } else {
-                return 0.2;
-            }
-        }
         if(this.blurThisNode) {
             return 0.2;
         }
@@ -198,18 +171,6 @@ export class NodeComponent implements OnDestroy {
     
     handleMouseOut() {
         this.nodeRelationService.notificationMouseOut({ node: this.node });
-    }
-
-    highlightFromSidebar() {
-        if(this.mouseoutNodesFromSidebar) {
-            this.mouseoutNodesFromSidebar.emit(this.node);
-        }
-    }
-
-    resetHighlightFromSidebar() {
-        if(this.mouseoutNodesFromSidebar) {
-            this.mouseoutNodesFromSidebar.emit(this.node);
-        }
     }
 
     allNeighboursVisible(): boolean {
